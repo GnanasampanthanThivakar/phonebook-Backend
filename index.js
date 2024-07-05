@@ -37,6 +37,10 @@ mongoose.connect(DB, {
     console.error('Database connection error:', err);
 });
 
+app.get('/', (req, res) => {
+    res.send('Welcome to the PhoneBook API');
+});
+
 app.use('/api', phoneBookRoutes);
 
 app.listen(PORT, () => {
