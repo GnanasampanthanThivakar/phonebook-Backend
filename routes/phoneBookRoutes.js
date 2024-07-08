@@ -1,5 +1,5 @@
 const express = require('express');
-const PhoneBook = require('../models/PhoneBook'); // Correct relative path
+const PhoneBook = require('../models/PhoneBook'); // Ensure the correct relative path
 const router = express.Router();
 
 // POST route to add a new phone book entry
@@ -35,7 +35,7 @@ router.get('/get-phone', async (req, res) => {
       }
     });
   } catch (err) {
-    res.status(500).json({
+    res.status  (500).json({
       status: 'Failed',
       message: err.message
     });
