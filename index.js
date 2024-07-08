@@ -31,8 +31,6 @@ app.use(cors(corsOptions));
 mongoose.connect(DB, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  useCreateIndex: true,
-  useFindAndModify: false,
 }).then(() => {
   console.log('Database connected..');
 }).catch((err) => {
