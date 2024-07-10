@@ -1,5 +1,5 @@
 const express = require('express');
-const PhoneBook = require('../model/PhoneBook'); // Adjust relative path as per your project structure
+const PhoneBook = require('../model/PhoneBook');
 const router = express.Router();
 
 // POST route to add a new phone book entry
@@ -8,13 +8,11 @@ router.post('/add-phone', async (req, res) => {
 
   try {
     const newPhoneBookEntry = new PhoneBook({ name, phone });
-    await newPhoneBookEntry.save();
+    const savedPhoneBookEntry = await newPhoneBookEntry.save();
 
     res.status(201).json({
       status: 'Success',
-      data: {
-        phoneBookEntry: newPhoneBookEntry
-      }
+      data: { phoneBookEntry: savedPhoneBookEntry }
     });
   } catch (err) {
     res.status(500).json({
@@ -30,9 +28,7 @@ router.get('/get-phone', async (req, res) => {
     const phoneNumbers = await PhoneBook.find({});
     res.status(200).json({
       status: 'Success',
-      data: {
-        phoneNumbers
-      }
+      data: { phoneNumbers }
     });
   } catch (err) {
     res.status(500).json({
@@ -56,9 +52,7 @@ router.get('/get-phone/:id', async (req, res) => {
     }
     res.status(200).json({
       status: 'Success',
-      data: {
-        phoneBookEntry
-      }
+      data: { phoneBookEntry }
     });
   } catch (err) {
     res.status(500).json({
@@ -74,7 +68,11 @@ router.put('/update-phone/:id', async (req, res) => {
   const { name, phone } = req.body;
 
   try {
-    const updatedPhoneBookEntry = await PhoneBook.findByIdAndUpdate(id, { name, phone }, { new: true });
+    const updatedPhoneBookEntry = await PhoneBook.findByIdAndUpdate(
+      id,
+      { name, phone },
+      { new: true, runValidators: true }
+    );
     if (!updatedPhoneBookEntry) {
       return res.status(404).json({
         status: 'Failed',
@@ -83,9 +81,7 @@ router.put('/update-phone/:id', async (req, res) => {
     }
     res.status(200).json({
       status: 'Success',
-      data: {
-        phoneBookEntry: updatedPhoneBookEntry
-      }
+      data: { phoneBookEntry: updatedPhoneBookEntry }
     });
   } catch (err) {
     res.status(500).json({

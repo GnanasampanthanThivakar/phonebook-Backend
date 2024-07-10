@@ -2,26 +2,25 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const phoneBookRoutes = require('./routes/phoneBookRoutes');
+require('dotenv').config();
 
 const app = express();
-const PORT = 8080;
-const DB = "mongodb+srv://gthivakar123:200052295@olex.l0to07k.mongodb.net/olex";
+const PORT = process.env.PORT || 8080;
+const DB = process.env.DB;
 
 // List of allowed origins
-const allowedOrigins = [
-  'https://phonebook-frontend-two.vercel.app',
-  'http://localhost:3000'
-];
+const allowedOrigins = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : [];
 
 const corsOptions = {
   origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps, curl requests)
     if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) === -1) {
+    if (allowedOrigins.length === 0 || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
       const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-      return callback(new Error(msg), false);
+      callback(new Error(msg), false);
     }
-    return callback(null, true);
   }
 };
 
